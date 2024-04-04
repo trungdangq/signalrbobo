@@ -55,5 +55,6 @@ jobs:
         with:
           app-name: 'signalrbobo'
           slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8F6F34ED9640445CB5171966C75941A1 }}
           package: .
           
