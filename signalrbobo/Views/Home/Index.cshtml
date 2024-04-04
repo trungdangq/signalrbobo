@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <button type="button" class="btn btn-primary" id="sendmessage">Send Message</button>
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/notificationHub")
+                .withAutomaticReconnect()
+                .build();
+
+            connection.onreconnecting(error => {
+                console.assert(connection.state === signalR.HubConnectionState.Reconnecting);
+
+            });
+
+            connection.onreconnected(connectionId => {
+                console.assert(connection.state === signalR.HubConnectionState.Connected);
+
+                console.log("Connected to SignalR");
+            });
+
+            async function start() {
+                try {
+                    await connection.start();
+                    console.log("SignalR Connected.");
+                } catch (err) {
+                    console.log(err);
+                    setTimeout(start, 5000);
+                }
+            };
+
+            connection.onclose(async () => {
+                await start();
+            });
+
+            start();
+
+            $("#sendmessage").click(async function () {
+                try {
+                    await connection.invoke("SendMessage", "Huebobo", "I've pressed the book driver button.");
+                } catch (err) {
+                    console.error(err);
+                }
+            })
+
+
+            connection.on("ReceiveMessage", (user, message) => {
+                console.log("I am the Admin and Huebobo is booking a driver");
+            });
+        })
+    </script>
+}
