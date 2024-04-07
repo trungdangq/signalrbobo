@@ -5,7 +5,12 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <button type="button" class="btn btn-primary" id="sendmessage">Send Message</button>
+    <div class="mb-3">
+        <label class="form-label">Email address</label>
+        <input type="email" class="form-control" id="groupName" placeholder="">
+    </div>
+    <button type="button" class="btn btn-secondary" id="joingroup">Join Group</button>
+    <button type="button" class="btn btn-primary" id="sendmessage">Book Driver</button>
 </div>
 
 @section Scripts
@@ -46,12 +51,23 @@
 
             $("#sendmessage").click(async function () {
                 try {
-                    await connection.invoke("SendMessage", "Huebobo", "I've pressed the book driver button.");
+                    await connection.invoke("SendMessage", "Huebobo", "BookDriver");
                 } catch (err) {
                     console.error(err);
                 }
-            })
+            });
 
+            async function joinGroup(){
+                try {
+                    await connection.invoke("JoinGroup", $("#groupName").val());
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            $("#joingroup").click(async function () {
+                await joinGroup();
+            });
 
             connection.on("ReceiveMessage", (user, message) => {
                 console.log("I am the Admin and Huebobo is booking a driver");

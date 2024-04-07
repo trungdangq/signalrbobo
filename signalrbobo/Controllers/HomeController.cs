@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using signalrbobo.Hubs;
 using signalrbobo.Models;
 using System.Diagnostics;
 
